@@ -1,0 +1,42 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "grassLand.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "grassLand.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 464,
+                "y": 270
+            }
+        },
+        "grassLand.tmx#grassLand-packed": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/jesus/OneDrive/Documents/Class-Work/CMPM 120/1-D movement/assets",
+    "last.imagePath": "C:/Users/jesus/OneDrive/Documents/Class-Work/CMPM 120/TopDownWorld/assets",
+    "map.height": 41,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 63,
+    "openFiles": [
+        "grassLand.tmx"
+    ],
+    "project": "grassLand.tiled-project",
+    "recentFiles": [
+        "grassLand.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

@@ -1,0 +1,1 @@
+Create a player sprite that can show a projectile, move in 1D up and down. 
