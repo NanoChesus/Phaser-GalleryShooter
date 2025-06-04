@@ -4,21 +4,34 @@ class level3 extends baseLevel {
         super('level3')
     }
 
-    preload(){
-        this.load.setPath("./assets/");
-        this.load.atlasXML("SpaceFighters", "/img/sheet.png", "/img/sheet.xml");
-        this.load.atlasXML("animals", "/img/roundOutline.png", "/img/roundOutline.xml");
-        this.load.atlasXML("aliens", "/img/spritesheet_spaceships.png", "/img/spritesheet_spaceships.xml");
-        this.load.image("tiny_town_tiles", "/img/kenny-tiny-town-tilemap-packed.png");
-        this.load.tilemapTiledJSON("map", "grassLandTiled.json");
-        this.load.audio("Engine", "/Audio/spaceEngineLow_003.ogg");
-        this.load.audio("lazer", "/Audio/laserSmall_000.ogg");
-        this.load.audio("lazerRed", "/img/laserRed01.png");
-        this.load.audio("explode", "/Audio/explosionCrunch_000.ogg");
-        this.load.audio("hit", "/Audio/impactMetal_003.ogg");
-        this.load.audio("playerHit", "/Audio/explosionCrunch_000.ogg");
-        this.load.audio("abduct", "/Audio/forceField_000.ogg");
-    }
+        preload() {
+            this.load.setPath("./assets/img/");  // Set default path for images
+
+            // --- Atlases ---
+            this.load.atlasXML("SpaceFighters", "sheet.png", "sheet.xml");
+            this.load.atlasXML("animals", "roundOutline.png", "roundOutline.xml");
+            this.load.atlasXML("aliens", "spritesheet_spaceships.png", "spritesheet_spaceships.xml");
+
+            // --- Multiatlas ---
+            this.load.multiatlas("kenny-particles", "kenny-particles.json", "./assets/img");
+
+            // --- Images ---
+            this.load.image("tiny_town_tiles", "kenny-tiny-town-tilemap-packed.png");
+            this.load.image("lazerRed", "laserRed01.png");
+
+            // --- Tilemap ---
+            this.load.setPath("./assets/tiled/");
+            this.load.tilemapTiledJSON("map", "grassLandTiled.json");
+
+            // --- Audio ---
+            this.load.setPath("./assets/audio/");
+            this.load.audio("Engine", "spaceEngineLow_003.ogg");
+            this.load.audio("lazer", "laserSmall_000.ogg");
+            this.load.audio("explode", "explosionCrunch_000.ogg");
+            this.load.audio("hit", "impactMetal_003.ogg");
+            this.load.audio("playerHit", "explosionCrunch_000.ogg");
+            this.load.audio("abduct", "forceField_000.ogg");
+        }
 
 
     create(){
@@ -75,11 +88,23 @@ class level3 extends baseLevel {
     
 
         this.createCommonObjects();
+        this.levelOver = false;
+        this.time.delayedCall(19000,()=>{
+            this.levelOver = true;
+        });
+        
+        this.input.keyboard.on('keydown-R', ()=>{
+         this.scene.start("victory");
+        });
+    
     }
 
 
     update(){
     this.updateCommon();
+    if(this.levelOver === true ){
+        this.scene.start("victory");   
+    }
     
     }
 }

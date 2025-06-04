@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "grassLand.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -28,7 +28,6 @@
     "map.tileWidth": 16,
     "map.width": 63,
     "openFiles": [
-        "grassLand.tmx"
     ],
     "project": "grassLand.tiled-project",
     "recentFiles": [

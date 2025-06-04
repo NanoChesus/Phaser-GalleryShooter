@@ -4,7 +4,7 @@ class level1 extends Phaser.Scene {
     path;
 
     constructor() {
-        super("level1");
+        super("level0");
     }
 
     preload() {

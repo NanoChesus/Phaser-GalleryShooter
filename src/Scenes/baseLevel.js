@@ -3,23 +3,44 @@ class baseLevel extends Phaser.Scene {
         super(key);
     }
 
-    preload() {
-        this.load.setPath("./assets/");
-        this.load.atlasXML("SpaceFighters", "/img/sheet.png", "/img/sheet.xml");
-        this.load.atlasXML("animals", "/img/roundOutline.png", "/img/roundOutline.xml");
-        this.load.atlasXML("aliens", "/img/spritesheet_spaceships.png", "/img/spritesheet_spaceships.xml");
-        this.load.image("tiny_town_tiles", "/img/kenny-tiny-town-tilemap-packed.png");
-        this.load.tilemapTiledJSON("map", "grassLandTiled.json");
-        this.load.audio("Engine", "/Audio/spaceEngineLow_003.ogg");
-        this.load.audio("lazer", "/Audio/laserSmall_000.ogg");
-        //this.load.audio("lazerRed", "/img/laserRed01.png");
-        this.load.audio("explode", "/Audio/explosionCrunch_000.ogg");
-        this.load.audio("hit", "/Audio/impactMetal_003.ogg");
-        this.load.audio("playerHit", "/Audio/explosionCrunch_000.ogg");
-        this.load.audio("abduct", "/Audio/forceField_000.ogg");
-    }
+        preload() {
+            this.load.setPath("./assets/img/");  // Set default path for images
+
+            // --- Atlases ---
+            this.load.atlasXML("SpaceFighters", "sheet.png", "sheet.xml");
+            this.load.atlasXML("animals", "roundOutline.png", "roundOutline.xml");
+            this.load.atlasXML("aliens", "spritesheet_spaceships.png", "spritesheet_spaceships.xml");
+
+            // --- Multiatlas ---
+            this.load.multiatlas("kenny-particles", "kenny-particles.json", "./img");
+
+            // --- Images ---
+            this.load.image("tiny_town_tiles", "kenny-tiny-town-tilemap-packed.png");
+            this.load.image("lazerRed", "laserRed01.png");
+
+            // --- Tilemap ---
+            this.load.setPath("./assets/tiled/");
+            this.load.tilemapTiledJSON("map", "grassLandTiled.json");
+
+            // --- Audio ---
+            this.load.setPath("./assets/audio/");
+            this.load.audio("Engine", "spaceEngineLow_003.ogg");
+            this.load.audio("lazer", "laserSmall_000.ogg");
+            this.load.audio("explode", "explosionCrunch_000.ogg");
+            this.load.audio("hit", "impactMetal_003.ogg");
+            this.load.audio("playerHit", "explosionCrunch_000.ogg");
+            this.load.audio("abduct", "forceField_000.ogg");
+        }
+
 
     createCommonObjects() {
+        //debug calls
+        //console.log(this.textures.exists("kenny-particles")); // should be true
+        //this.add.image(400, 300, "kenny-particles", "circle_01.png"); // test draw circle_01.png
+        // this.load.once("complete", () => {
+        //console.log(this.textures.get("kenny-particles").getFrameNames());
+        // });
+
         //variables
         this.SPEED = 4;
         this.COW_SCALE = .25;
@@ -31,8 +52,8 @@ class baseLevel extends Phaser.Scene {
         this.tileset = this.map.addTilesetImage("grassLand-packed", "tiny_town_tiles");
         this.grassLayer = this.map.createLayer("ground", this.tileset, 0, 0);
         this.treeLayer = this.map.createLayer("trees-n-shrooms", this.tileset, 0, 0); 
-        this.grassLayer.setScale(1.0);
-        this.treeLayer.setScale(1.0);
+        //this.grassLayer.setScale(1.0);
+        //this.treeLayer.setScale(1.0);
         //player
         this.player = this.add.sprite(this.PLAYER_START_X, this.PLAYER_START_Y, 'SpaceFighters', "enemyBlue2.png").setAngle(180).setScale(.6);
         this.physics.add.existing(this.player);
@@ -51,7 +72,62 @@ class baseLevel extends Phaser.Scene {
             color: '#ffffff',
             fontFamily: 'Arial'
         }).setOrigin(1, 0);  // Align text top-right corner
+        //particles
         
+        //names
+            //circle
+            let circleEffect = this.anims.generateFrameNames('kenny-particles', {
+                prefix: 'circle_',
+                start: 1,
+                end: 5,
+                zeroPad: 2,
+                suffix: '.png'
+            }).map(f => f.frame);
+            //spark
+                let sparkEffect = this.anims.generateFrameNames('kenny-particles', {
+                prefix: 'trace_',
+                start: 1,
+                end: 7,
+                zeroPad: 2,
+                suffix: '.png'
+            }).map(f => f.frame);
+
+        
+        //emitters
+        this.bulletEffect = this.add.particles(0, 0, 'kenny-particles', {
+            frame: circleEffect,
+            lifespan: 300,
+            speedY: { min: 20, max: 60 },
+            x:0,
+            y:0,
+            angle: { min: 180, max: 360 },
+            gravityY: 0,
+            scale: { start: .2, end: 0.05 },
+            alpha: { start: 0.8, end: 0 },
+            tint: 0x66CCFF, // light blue color
+            quantity: 1,
+            frequency: 60,
+            blendMode: 'ADD'
+        });
+        this.bulletEffect.stop(); 
+
+        this.sparkEffect = this.add.particles(0, 0, 'kenny-particles', {
+            frame: sparkEffect,
+            lifespan: 300,
+            speedY: { min: 20, max: 60 },
+            x:0,
+            y:0,
+            angle: { min: 180, max: 360 },
+            gravityY: 0,
+            scale: { start: .2, end: 0.05 },
+            alpha: { start: 0.8, end: 0 },
+            tint: 0x66CCFF, // light blue color
+            quantity: 1,
+            frequency: 60,
+            blendMode: 'ADD'
+        });
+        this.sparkEffect.flow(20,2,20)
+
         
       
         //groups
@@ -66,7 +142,8 @@ class baseLevel extends Phaser.Scene {
         this.engineNoise();
         //this.createEnemysPink(this.waveData.pink);
         
-        //collisions
+        //collisions-------------
+        //player laser hits enemy
         this.physics.add.overlap(
             this.lasers,
             this.enemyGroup,
@@ -74,7 +151,7 @@ class baseLevel extends Phaser.Scene {
             null,
             this
         );
-
+        //enemy collides with player
         this.physics.add.overlap(
             this.enemyGroup,
             this.player,
@@ -82,16 +159,32 @@ class baseLevel extends Phaser.Scene {
             null,
             this
         );
+        //lasers hit player
+        this.physics.add.overlap(
+            this.enemyLasers,
+            this.player,
+            this.laserHitsPlayer,
+            null,
+            this
+        );
 
-         // engineSound   
+        // engineSound   
         this.engineSound = this.sound.add("Engine", { loop: true, volume: 0.3 });
     }
     
     updateCommon() {
         // Player movement
-        if (this.keyA.isDown && this.player.x > 30) this.player.x -= this.SPEED;
-        if (this.keyD.isDown && this.player.x < 990) this.player.x += this.SPEED;
-
+        if (this.keyA.isDown && this.player.x > 30){
+            this.player.x -= this.SPEED;
+            this.sparkEffect.startFollow(this.player, 0, this.player.height/2);
+            this.sparkEffect.start();
+        } 
+        if (this.keyD.isDown && this.player.x < 990){
+            this.player.x += this.SPEED;
+            this.sparkEffect.startFollow(this.player, 0, this.player.height/2);
+            this.sparkEffect.start();
+        } 
+        //enemy health bars
         this.enemyGroup.children.iterate(enemy => {
             if (enemy && enemy.healthBar) {
                 enemy.healthBar.clear();
@@ -100,7 +193,10 @@ class baseLevel extends Phaser.Scene {
                 enemy.healthBar.setDepth(2);
                 enemy.setDepth(1);
             }
+            if (!enemy?.active) return;
+
         });
+        //player health bar
         if(this.player && this.player.healthBar){
             this.player.healthBar.clear();
             this.player.healthBar.fillStyle(0x00ff00, 1);
@@ -108,8 +204,11 @@ class baseLevel extends Phaser.Scene {
             this.player.healthBar.setDepth(2);
             this.player.setDepth(1);
         }
-        if(this.player.health <=0){
-            this.scene.start("GameOver");
+        if(this.player.health <= 0){
+            this.cameras.main.fadeOut(500);
+            this.time.delayedCall(500, () => {
+                this.scene.start("GameOver");
+            });
         }
 
         // Engine sound
@@ -143,9 +242,9 @@ class baseLevel extends Phaser.Scene {
             { X: 666, Y: 320 }
         ];
 
-        this.cows = [
+        this.cows = [];
 
-        ];
+
 
         for (let cowp of this.cowPoints) {
             const cow = this.add.sprite(cowp.X, cowp.Y, 'animals', 'cow.png').setScale(this.COW_SCALE);
@@ -153,6 +252,36 @@ class baseLevel extends Phaser.Scene {
             this.cows.push(cow);
         }
     }
+
+    // createCows() {
+    // this.cowGroup = this.add.group();  // Group to manage cow sprites
+
+    //     // If this is the first level and cows haven't been created yet:
+    //     if (game.global.cows.length === 0) {
+    //         // Spawn cows fresh, for the first time
+    //         for (let i = 0; i < 3; i++) {
+    //             const x = 150 + i * 150;
+    //             const y = 500;
+    //             const cow = this.physics.add.sprite(x, y, 'cow');
+    //             cow.alive = true;
+    //             this.cowGroup.add(cow);
+
+    //             // Save this cow’s data to the global array
+    //             game.global.cows.push({ x, y, alive: true });
+    //         }
+    //     } else {
+    //         // Rebuild surviving cows from saved global data
+    //         game.global.cows.forEach((cowData, index) => {
+    //             if (cowData.alive) {
+    //                 const cow = this.physics.add.sprite(cowData.x, cowData.y, 'cow');
+    //                 cow.alive = true;
+    //                 cow.cowIndex = index;  // Track which entry it corresponds to
+    //                 this.cowGroup.add(cow);
+    //             }
+    //         });
+    //     }
+    // }
+
 
     startAbduction(enemy) {
             if (!enemy.active) return;
@@ -172,19 +301,23 @@ class baseLevel extends Phaser.Scene {
                     if (index !== -1) {
                         this.cows.splice(index, 1);
                     }
+                    //save current cows left in global variable array
                 }
             });
     }
     
     laserHitsEnemy(laser, enemy) {
+            //lose health
             enemy.health -= 1;
             this.sound.play("hit");
             console.log('enemy hit');
-
+            //hit tint
             enemy.setTint(0xffaaaa);
             this.time.delayedCall(100, () => {
                 enemy.clearTint();
             });
+            //explode effect
+            this.bulletEffect.explode(20, enemy.x, enemy.y);
 
             if (enemy.health <= 0) {
                 this.sound.play("explode");
@@ -197,6 +330,7 @@ class baseLevel extends Phaser.Scene {
 
             laser.destroy();
     }
+
 
     laserHitsPlayer(enemyObject, player){
 
@@ -217,7 +351,7 @@ class baseLevel extends Phaser.Scene {
         //inv Flicker
         let flickerCount = 0;
         let maxFlicks = 10;
-        let flickerInt = 10;
+        let flickerInt = 50;
         let flickerEvent = this.time.addEvent({
             delay:flickerInt,
             repeat:maxFlicks -1,
@@ -261,6 +395,8 @@ class baseLevel extends Phaser.Scene {
                 this.lasers.add(laser);
                 this.sound.play("lazer");
 
+        
+
                 this.tweens.add({
                     targets: laser,
                     y: laser.y - 1000,
@@ -279,7 +415,7 @@ class baseLevel extends Phaser.Scene {
     shooterFire(shooter) {
         const enemyLaser = this.add.sprite(shooter.x, shooter.y, 'SpaceFighters', 'laserRed04.png')
         this.physics.add.existing(enemyLaser);
-        this.enemyGroup.add(enemyLaser);
+        this.enemyLasers.add(enemyLaser);
         //this.sound.play('enemyLazer');
 
         this.tweens.add({
@@ -335,18 +471,21 @@ class baseLevel extends Phaser.Scene {
                 if (index !== -1) availableCows.splice(index, 1);
 
                 // Tween to cow
-                this.tweens.add({
-                    targets: enemy,
-                    y: enemy.targetCow.y - 70,
-                    x: enemy.targetCow.x,
-                    duration: 2000,
-                    ease: 'Power2',
-                    onComplete: () => {
-                        this.time.delayedCall(6000, () => {
-                            this.startAbduction(enemy);
-                        });
-                    }
-                });
+                if(enemy.targetCow != null){
+                    this.tweens.add({
+                        targets: enemy,
+                        y: enemy.targetCow.y - 70,
+                        x: enemy.targetCow.x,
+                        duration: 2000,
+                        ease: 'Power2',
+                        onComplete: () => {
+                            this.time.delayedCall(6000, () => {
+                                this.startAbduction(enemy);
+                            });
+                        }
+                    });
+                }
+                
             }
        // }
     }

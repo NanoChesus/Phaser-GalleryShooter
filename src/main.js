@@ -18,7 +18,7 @@ const config = {
     width: 1000,
     height: 650,
     backgroundColor: '#1A001A',
-    scene: [StartScreen, level1, level2, level3, GameOver],  
+    scene: [Load, StartScreen, level1, level2, level3, GameOver, Victory],  
     physics: {
         default: 'arcade',  
         arcade: {
@@ -36,6 +36,7 @@ const config = {
 const game = new Phaser.Game(config);
 
 game.global = {
-    score: 0
+    score: 0,
+    cows: [],
 };
 
