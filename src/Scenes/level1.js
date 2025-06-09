@@ -7,59 +7,49 @@ class level1 extends baseLevel {
         super("level1");
     }
 
-    preload() {
-        // this.load.setPath("./assets/");                               //path
-        // this.load.atlasXML("SpaceFighters", "/img/sheet.png", "/img/sheet.xml");   //atlas
-        // this.load.atlasXML("animals", "/img/roundOutline.png", "/img/roundOutline.xml");   // atlas
-        // this.load.atlasXML("aliens", "/img/spritesheet_spaceships.png", "/img/spritesheet_spaceships.xml");//spaceships atlas
-        // //particle
-        // this.load.multiatlas("kenny-particles", "kenny-particles.json", "./assets/img");//particle multi atlas
-
-        // this.load.image("tiny_town_tiles", "/img/kenny-tiny-town-tilemap-packed.png");//tilemap img 
-        // this.load.image("lazerRed", "/img/laserRed01.png");// lazer red
-        // this.load.tilemapTiledJSON("map", "grassLandTiled.json"); //grassbackground
-        // this.load.audio("Engine", "/Audio/spaceEngineLow_003.ogg"); //engine audio
-        // this.load.audio("lazer", "/Audio/laserSmall_000.ogg");      //lasermslal audio
-        // this.load.audio("explode", "/Audio/explosionCrunch_000.ogg");//explosion audio
-        // this.load.audio("hit", "/Audio/impactMetal_003.ogg");       //metal impact audio
-        // this.load.audio("playerHit", "/Audio/explosionCrunch_000.ogg");//explosion crunch
-        // this.load.audio("abduct", "/Audio/forceField_000.ogg");        //forceField   
-    }
+    preload(){}
 
     create(){     
+        //debug messages
+
         // Wave data
         this.waveData = [
-            { delay: 300, enemyPoints: [{ X: 250, Y: -100 }], type:"yellow" },
+            { delay: 300, enemyPoints: [{ X: 400, Y: -100 }], type:"yellow" },
             { delay: 4000, enemyPoints: [{ X: 250, Y: -100 }, { X: 500, Y: -100 }], type:"yellow"},
             { delay: 8000, enemyPoints: [{ X: 250, Y: -100 }, { X: 500, Y: -100 }, { X: 750, Y: -100 }, { X: 250, Y: -100 }, { X: 500, Y: -100 }], type:"yellow" },
-            { delay: 17000, enemyPoints: [{ X: 250, Y: -100 }, { X: 500, Y: -100 }, { X: 750, Y: -100 }, { X: 250, Y: -100 }, { X: 500, Y: -100 }], type:"yellow"}
+            { delay: 17000, enemyPoints: [{ X: 250, Y: -100 }, { X: 500, Y: -100 }, { X: 750, Y: -100 }, { X: 250, Y: -100 }, { X: 500, Y: -100 }], type:"yellow"},
+            { delay: 4000, enemyPoints: [{X:-100, Y:625}], type:"blue"},
         ];
 
-    
-        this.levelOver = false;
-        this.time.delayedCall(17000,()=>{
-            this.levelOver = true;
+        this.createCommonObjects();
+
+        //wave spawning over check
+        this.wavesOver = false;
+        this.time.delayedCall(17500,()=>{
+            this.wavesOver = true;
+            console.log('wavesOver')
         });
         
 
-        this.createCommonObjects();
+        
         
         this.input.keyboard.on('keydown-R', ()=>{
              this.scene.start("level2");
         });
+        //debbug message
+        console.log('level1')
     } 
        
 
 
 
     update(){
-       this.updateCommon();
-
-        if(this.levelOver === true ){
-            this.scene.start("level2");   
+        //adds all update() methods common to the whole game to Level
+        this.updateCommon();
+        // Check if all enemies are dead
+        if (this.wavesOver && this.enemyGroup.countActive(true) === 0) {
+            this.scene.start("level2")
         }
-      
-    
     }
 
 }

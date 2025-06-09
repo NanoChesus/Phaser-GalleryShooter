@@ -37,6 +37,13 @@ const game = new Phaser.Game(config);
 
 game.global = {
     score: 0,
-    cows: [],
+    cows: [
+        { X: 250, Y: 200, name: 'Mable' },
+        { X: 500, Y: 200,  name: 'Edna'},
+        { X: 750, Y: 200, name: 'Agnes' },
+        { X: 350, Y: 300, name: 'Dolores' },
+        { X: 650, Y: 300, name: 'Dottie' }
+    ],
+    scoreList: [],
 };
 

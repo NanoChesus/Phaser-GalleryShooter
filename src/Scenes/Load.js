@@ -9,6 +9,7 @@ class Load extends Phaser.Scene {
         this.load.atlasXML("SpaceFighters", "/img/sheet.png", "/img/sheet.xml");   //atlas
         this.load.atlasXML("animals", "/img/roundOutline.png", "/img/roundOutline.xml");   // atlas
         this.load.atlasXML("aliens", "/img/spritesheet_spaceships.png", "/img/spritesheet_spaceships.xml");//spaceships atlas
+        this.load.atlasXML("beams", "img/spritesheet_lasers.png", "/img/spritesheet_lasers.xml")//laser spritesheet
         //particle
         this.load.multiatlas("kenny-particles", "kenny-particles.json");//particle multi atlas
 
@@ -24,6 +25,8 @@ class Load extends Phaser.Scene {
     }
 
     create() {
+        console.log("Load create() cows:", game.global.cows);
+
 
          // next scene
          this.scene.start("StartScreen");

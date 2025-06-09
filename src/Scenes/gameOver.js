@@ -4,21 +4,53 @@ class GameOver extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(500, 300, 'Game Over', {
+        // Set background color
+        this.cameras.main.setBackgroundColor('#000000'); // black
+
+        // Title text
+        this.add.text(500, 100, 'GameOver', {
             fontSize: '64px',
-            color: '#ffffff'
+            color: '#00FF99',
+            fontFamily: 'Arial Black',
+            stroke: '#ffffff',
+            strokeThickness: 4
         }).setOrigin(0.5);
 
-        this.add.text(500, 400, 'Press R to Restart', {
-            fontSize: '32px',
-            color: '#ffffff'
-        }).setOrigin(0.5);
-
-        this.add.text(500, 200, 'Score: ' + this.sys.game.global.score, {
+        // Score
+        this.add.text(500, 250, 'Score: ' + this.sys.game.global.score, {
             fontSize: '32px',
             color: '#ffffff',
             fontFamily: 'Arial'
-        }).setOrigin(.5, 0);
+        }).setOrigin(0.5);
+
+        // Restart instructions
+        this.add.text(500, 350, 'Press R to Restart', {
+            fontSize: '32px',
+            color: '#ffffff',
+            fontFamily: 'Arial'
+        }).setOrigin(0.5);
+
+        // Credits (bottom right)
+        this.add.text(950, 600, 
+        `Credits:
+        Art: Kenney.nl (Public Domain)
+        Code & Design: Jesus Barrios
+        Music & SFX: freesound.org
+        Made with Phaser 3`, {
+            fontSize: '14px',
+            color: '#aaaaaa',
+            fontFamily: 'Courier',
+            align: 'right'
+        }).setOrigin(1, 1);
+
+        //reset game.global.cows
+        game.global.cows = [
+        { X: 250, Y: 200, name: 'Mable' },
+        { X: 500, Y: 200,  name: 'Edna'},
+        { X: 750, Y: 200, name: 'Agnes' },
+        { X: 350, Y: 300, name: 'Dolores' },
+        { X: 650, Y: 300, name: 'Dottie' }
+    ];
         
 
         this.input.keyboard.on('keydown-R', () => {
