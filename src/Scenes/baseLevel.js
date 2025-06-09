@@ -719,7 +719,7 @@ class baseLevel extends Phaser.Scene {
             zoner.alive = true;
             zoner.healthBar = this.add.graphics();
             this.enemyGroup.add(zoner);
-            this.enemyGroup.add(zonerBeam);
+            this.enemyLasers.add(zonerBeam);
         
 
             //tweens
