@@ -79,7 +79,7 @@ class baseLevel extends Phaser.Scene {
         //player
         this.player = this.add.sprite(this.PLAYER_START_X, this.PLAYER_START_Y, 'SpaceFighters', "enemyBlue2.png").setAngle(180).setScale(.6);
         this.physics.add.existing(this.player);
-        this.player.health = 5;
+        this.player.health = 50;
         this.player.score = 0;
         this.player.inv = false;
         this.player.healthBar = this.add.graphics();
@@ -719,7 +719,7 @@ class baseLevel extends Phaser.Scene {
             zoner.alive = true;
             zoner.healthBar = this.add.graphics();
             this.enemyGroup.add(zoner);
-            this.enemyLasers.add(zonerBeam);
+            this.enemyGroup.add(zonerBeam);
         
 
             //tweens
@@ -732,6 +732,8 @@ class baseLevel extends Phaser.Scene {
                 repeat: 0,         // loop forever
                 onComplete: ()=>{
                     this.killEnemy(zoner);
+                    this.killEnemy(zonerBeam);
+             
 
                 }
             });
