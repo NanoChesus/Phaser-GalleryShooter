@@ -51,9 +51,9 @@ create(){
                 ],
                 type:"Beige"
             },  //blue enemys
-            { delay: 7500, enemyPoints: [{X:-100, Y:625}], type:"blue"},
-            { delay: 8500, enemyPoints: [{X:-100, Y:625}], type:"blue"},
-            { delay: 17500, enemyPoints: [{X:-100, Y:625}], type:"blue"},
+            // { delay: 7500, enemyPoints: [{X:-100, Y:625}], type:"blue"},
+            // { delay: 8500, enemyPoints: [{X:-100, Y:625}], type:"blue"},
+            // { delay: 17500, enemyPoints: [{X:-100, Y:625}], type:"blue"},
 
 
             { //wave1
@@ -103,7 +103,7 @@ create(){
                 ],
                 type:"Beige"
             },            
-            { delay: 17500, enemyPoints: [{X:-100, Y:625}], type:"blue"},
+            //{ delay: 17500, enemyPoints: [{X:-100, Y:625}], type:"blue"},
             {//wave6
                 delay:17000,
                 enemyPoints:[
